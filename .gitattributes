@@ -1,0 +1,6 @@
+# Git LFS configuration
+*.ipynb filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
+data/raw/rejected_2007_to_2018Q4.csv filter=lfs diff=lfs merge=lfs -text
+notebooks/01_loan_default_EDA.ipynb filter=lfs diff=lfs merge=lfs -text
+data/raw/accepted_2007_to_2018Q4.csv filter=lfs diff=lfs merge=lfs -text
