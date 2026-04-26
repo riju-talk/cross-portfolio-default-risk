@@ -237,7 +237,7 @@ This project is **inspired by ACM research on credit risk modeling** and follows
 
 ### Differences from Production Systems
 - Simplified feature engineering (no external bureau data)
-- No hyperparameter optimization (conservative defaults)
+- Hyperparameter tuning is bounded (research-oriented, not exhaustive)
 - No temporal cross-validation
 - No fairness audits
 - No online learning / model updating
@@ -255,7 +255,7 @@ This project is **inspired by ACM research on credit risk modeling** and follows
 
 ### Future Extensions
 1. **Advanced feature engineering**: Payment velocity, trend features, polynomial interactions
-2. **Hyperparameter tuning**: GridSearchCV, Bayesian optimization
+2. **Large-scale hyperparameter tuning**: Bayesian optimization with wider search spaces and richer CV design
 3. **Model stacking/ensembling**: Combine predictions from multiple models
 4. **SHAP analysis**: Explain individual predictions for interpretability
 5. **Fairness analysis**: Check for demographic bias

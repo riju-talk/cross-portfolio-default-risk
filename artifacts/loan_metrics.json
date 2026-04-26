@@ -1,0 +1,192 @@
+{
+  "problem": "lendingclub_loan_default",
+  "dataset": "data\\raw\\accepted_2007_to_2018Q4.csv",
+  "data_source_mode": "accepted_loans_chunked",
+  "created_at_utc": "2026-04-26T21:00:55.567620+00:00",
+  "seed": 42,
+  "max_rows_requested": 30000,
+  "n_rows": 30000,
+  "n_features": 25,
+  "train_rows": 24000,
+  "test_rows": 6000,
+  "class_distribution": {
+    "non_default_0": 23881,
+    "default_1": 6119,
+    "default_rate": 0.20396666666666666
+  },
+  "results": [
+    {
+      "name": "random_forest",
+      "roc_auc": 0.7365953884345474,
+      "pr_auc": 0.4206833905613149,
+      "f1": 0.4488929329693661,
+      "precision": 0.3569705740472745,
+      "recall": 0.6045751633986928,
+      "top_decile_capture_rate": 0.2549019607843137
+    },
+    {
+      "name": "logistic_regression",
+      "roc_auc": 0.7358278319703091,
+      "pr_auc": 0.41907230451422506,
+      "f1": 0.4443200895355344,
+      "precision": 0.33787234042553194,
+      "recall": 0.6486928104575164,
+      "top_decile_capture_rate": 0.24836601307189543
+    },
+    {
+      "name": "xgboost",
+      "roc_auc": 0.7298796542625984,
+      "pr_auc": 0.41453228193464253,
+      "f1": 0.4487415592387968,
+      "precision": 0.35939036381514256,
+      "recall": 0.5972222222222222,
+      "top_decile_capture_rate": 0.24918300653594772
+    }
+  ],
+  "best_model": {
+    "name": "random_forest",
+    "roc_auc": 0.7365953884345474,
+    "pr_auc": 0.4206833905613149,
+    "f1": 0.4488929329693661,
+    "precision": 0.3569705740472745,
+    "recall": 0.6045751633986928,
+    "top_decile_capture_rate": 0.2549019607843137
+  },
+  "classification_reports": {
+    "logistic_regression": {
+      "0": {
+        "precision": 0.8821917808219178,
+        "recall": 0.6742043551088778,
+        "f1-score": 0.7643009731782577,
+        "support": 4776.0
+      },
+      "1": {
+        "precision": 0.33787234042553194,
+        "recall": 0.6486928104575164,
+        "f1-score": 0.4443200895355344,
+        "support": 1224.0
+      },
+      "accuracy": 0.669,
+      "macro avg": {
+        "precision": 0.6100320606237248,
+        "recall": 0.6614485827831971,
+        "f1-score": 0.604310531356896,
+        "support": 6000.0
+      },
+      "weighted avg": {
+        "precision": 0.7711506149810551,
+        "recall": 0.669,
+        "f1-score": 0.6990248729151421,
+        "support": 6000.0
+      }
+    },
+    "random_forest": {
+      "0": {
+        "precision": 0.876750700280112,
+        "recall": 0.7208961474036851,
+        "f1-score": 0.791221417901873,
+        "support": 4776.0
+      },
+      "1": {
+        "precision": 0.3569705740472745,
+        "recall": 0.6045751633986928,
+        "f1-score": 0.4488929329693661,
+        "support": 1224.0
+      },
+      "accuracy": 0.6971666666666667,
+      "macro avg": {
+        "precision": 0.6168606371636933,
+        "recall": 0.662735655401189,
+        "f1-score": 0.6200571754356196,
+        "support": 6000.0
+      },
+      "weighted avg": {
+        "precision": 0.7707155545286132,
+        "recall": 0.6971666666666667,
+        "f1-score": 0.7213864069756416,
+        "support": 6000.0
+      }
+    },
+    "xgboost": {
+      "0": {
+        "precision": 0.8756933938477055,
+        "recall": 0.727177554438861,
+        "f1-score": 0.7945550217341569,
+        "support": 4776.0
+      },
+      "1": {
+        "precision": 0.35939036381514256,
+        "recall": 0.5972222222222222,
+        "f1-score": 0.4487415592387968,
+        "support": 1224.0
+      },
+      "accuracy": 0.7006666666666667,
+      "macro avg": {
+        "precision": 0.617541878831424,
+        "recall": 0.6621998883305416,
+        "f1-score": 0.6216482904864769,
+        "support": 6000.0
+      },
+      "weighted avg": {
+        "precision": 0.7703675757210626,
+        "recall": 0.7006666666666667,
+        "f1-score": 0.7240090753851035,
+        "support": 6000.0
+      }
+    }
+  },
+  "selected_feature_count": 25,
+  "selected_features": [
+    "loan_amnt",
+    "term",
+    "int_rate",
+    "installment",
+    "grade",
+    "sub_grade",
+    "emp_length",
+    "home_ownership",
+    "annual_inc",
+    "verification_status",
+    "purpose",
+    "dti",
+    "delinq_2yrs",
+    "fico_range_low",
+    "fico_range_high",
+    "inq_last_6mths",
+    "open_acc",
+    "pub_rec",
+    "revol_bal",
+    "revol_util",
+    "total_acc",
+    "initial_list_status",
+    "application_type",
+    "mort_acc",
+    "pub_rec_bankruptcies"
+  ],
+  "tuned_hyperparameters_in_script": {
+    "logistic_regression": {
+      "C": 1.0,
+      "max_iter": 3000,
+      "class_weight": "balanced"
+    },
+    "random_forest": {
+      "n_estimators": 350,
+      "max_depth": 14,
+      "min_samples_split": 40,
+      "min_samples_leaf": 20,
+      "max_features": "sqrt",
+      "class_weight": "balanced_subsample"
+    },
+    "xgboost": {
+      "n_estimators": 500,
+      "max_depth": 5,
+      "learning_rate": 0.05,
+      "subsample": 0.9,
+      "colsample_bytree": 0.8,
+      "min_child_weight": 5,
+      "reg_lambda": 2.0,
+      "objective": "binary:logistic",
+      "eval_metric": "aucpr"
+    }
+  }
+}
