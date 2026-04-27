@@ -9,7 +9,7 @@ from pipelines.card_pipeline import run_card_pipeline
 from pipelines.loan_pipeline import run_loan_pipeline
 
 
-ARTIFACT_DIR = Path("artifacts")
+RESULTS_DIR = Path("results")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -54,7 +54,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
     combined_payload: dict[str, Any] = {
         "executed_problem": args.problem,
@@ -65,7 +65,7 @@ def main() -> None:
         print("Running card-default pipeline...")
         card_payload = run_card_pipeline(
             data_path=args.card_data_path,
-            output_path=ARTIFACT_DIR / "card_metrics.json",
+            output_path=RESULTS_DIR / "card" / "metrics.json",
         )
         combined_payload["runs"]["card"] = card_payload
         print(f"Card best model: {card_payload['best_model']['name']}")
@@ -74,14 +74,14 @@ def main() -> None:
         print("Running loan-default pipeline...")
         loan_payload = run_loan_pipeline(
             accepted_path=args.loan_data_path,
-            output_path=ARTIFACT_DIR / "loan_metrics.json",
+            output_path=RESULTS_DIR / "loan" / "metrics.json",
             max_rows=args.max_loan_rows,
             chunksize=args.loan_chunksize,
         )
         combined_payload["runs"]["loan"] = loan_payload
         print(f"Loan best model: {loan_payload['best_model']['name']}")
 
-    combined_path = ARTIFACT_DIR / "metrics.json"
+    combined_path = RESULTS_DIR / "metrics.json"
     combined_path.write_text(json.dumps(combined_payload, indent=2), encoding="utf-8")
 
     print("All requested experiments completed.")

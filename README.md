@@ -20,20 +20,20 @@ The objective is not just to train a classifier, but to show a full machine-lear
 - `pipelines/card_pipeline.py`
 	- End-to-end UCI credit-card default pipeline.
 	- Trains Logistic Regression, Random Forest, and XGBoost (if available).
-	- Writes `artifacts/card_metrics.json`.
+	- Writes `results/card/metrics.json` plus model diagnostics under `results/card/plots/` and `results/card/predictions/`.
 
 - `pipelines/loan_pipeline.py`
 	- End-to-end LendingClub loan default pipeline.
 	- Chunked loading for large raw CSV.
 	- Terminal-status target mapping with leakage-safe defaults.
 	- Trains Logistic Regression, Random Forest, and XGBoost (if available).
-	- Writes `artifacts/loan_metrics.json`.
+	- Writes `results/loan/metrics.json` plus model diagnostics under `results/loan/plots/` and `results/loan/predictions/`.
 
 ### 2) Unified execution entrypoint
 
 - `main.py`
 	- Run one problem or both with CLI flags.
-	- Writes merged run summary to `artifacts/metrics.json`.
+	- Writes merged run summary to `results/metrics.json`.
 
 ### 3) Notebook research workflow (4 per problem)
 
@@ -96,9 +96,11 @@ python main.py --problem loan --max-loan-rows 120000 --loan-chunksize 100000
 
 ### Artifacts generated
 
-- `artifacts/card_metrics.json`
-- `artifacts/loan_metrics.json`
-- `artifacts/metrics.json`
+- `results/card/metrics.json`
+- `results/loan/metrics.json`
+- `results/metrics.json`
+- Diagnostic PNG visualizations per model and dataset under `results/card/plots/` and `results/loan/plots/`
+- Validation prediction exports under `results/card/predictions/` and `results/loan/predictions/`
 
 Each metrics file includes class distribution, ranking metrics (ROC-AUC, PR-AUC), threshold metrics (F1/precision/recall), top-decile capture rate, and per-model classification reports.
 

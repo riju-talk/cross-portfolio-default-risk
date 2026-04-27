@@ -1,0 +1,249 @@
+{
+  "problem": "credit_card_default",
+  "dataset": "data\\default_of_credit_card_clients.csv",
+  "created_at_utc": "2026-04-27T02:54:29.631771+00:00",
+  "seed": 42,
+  "target_column": "Y",
+  "n_rows": 30000,
+  "n_features": 23,
+  "train_rows": 24000,
+  "test_rows": 6000,
+  "class_distribution": {
+    "non_default_0": 23364,
+    "default_1": 6636,
+    "default_rate": 0.2212
+  },
+  "results": [
+    {
+      "name": "xgboost",
+      "roc_auc": 0.7760930329615643,
+      "pr_auc": 0.5557278248385682,
+      "f1": 0.4666021297192643,
+      "precision": 0.652232746955345,
+      "recall": 0.3632253202712886,
+      "top_decile_capture_rate": 0.3089675960813866
+    },
+    {
+      "name": "random_forest",
+      "roc_auc": 0.7757551074645009,
+      "pr_auc": 0.5514349859163737,
+      "f1": 0.5432357043235704,
+      "precision": 0.5055158987670344,
+      "recall": 0.5870384325546345,
+      "top_decile_capture_rate": 0.3097211755840241
+    },
+    {
+      "name": "logistic_regression",
+      "roc_auc": 0.7081117116704518,
+      "pr_auc": 0.49044321239240035,
+      "f1": 0.461322869955157,
+      "precision": 0.36724676483712626,
+      "recall": 0.6201959306706858,
+      "top_decile_capture_rate": 0.29691032403918616
+    }
+  ],
+  "best_model": {
+    "name": "xgboost",
+    "roc_auc": 0.7760930329615643,
+    "pr_auc": 0.5557278248385682,
+    "f1": 0.4666021297192643,
+    "precision": 0.652232746955345,
+    "recall": 0.3632253202712886,
+    "top_decile_capture_rate": 0.3089675960813866
+  },
+  "classification_reports": {
+    "logistic_regression": {
+      "0": {
+        "precision": 0.8659217877094972,
+        "recall": 0.6965546757971325,
+        "f1-score": 0.7720588235294118,
+        "support": 4673.0
+      },
+      "1": {
+        "precision": 0.36724676483712626,
+        "recall": 0.6201959306706858,
+        "f1-score": 0.461322869955157,
+        "support": 1327.0
+      },
+      "accuracy": 0.6796666666666666,
+      "macro avg": {
+        "precision": 0.6165842762733118,
+        "recall": 0.6583753032339091,
+        "f1-score": 0.6166908467422844,
+        "support": 6000.0
+      },
+      "weighted avg": {
+        "precision": 0.7556314951508911,
+        "recall": 0.6796666666666666,
+        "f1-score": 0.7033343884639058,
+        "support": 6000.0
+      }
+    },
+    "random_forest": {
+      "0": {
+        "precision": 0.8771024893473873,
+        "recall": 0.8369355874170769,
+        "f1-score": 0.8565484012264564,
+        "support": 4673.0
+      },
+      "1": {
+        "precision": 0.5055158987670344,
+        "recall": 0.5870384325546345,
+        "f1-score": 0.5432357043235704,
+        "support": 1327.0
+      },
+      "accuracy": 0.7816666666666666,
+      "macro avg": {
+        "precision": 0.6913091940572109,
+        "recall": 0.7119870099858556,
+        "f1-score": 0.6998920527750134,
+        "support": 6000.0
+      },
+      "weighted avg": {
+        "precision": 0.7949199217306993,
+        "recall": 0.7816666666666666,
+        "f1-score": 0.7872540764281014,
+        "support": 6000.0
+      }
+    },
+    "xgboost": {
+      "0": {
+        "precision": 0.8393841475004752,
+        "recall": 0.9450032099293816,
+        "f1-score": 0.88906784779545,
+        "support": 4673.0
+      },
+      "1": {
+        "precision": 0.652232746955345,
+        "recall": 0.3632253202712886,
+        "f1-score": 0.4666021297192643,
+        "support": 1327.0
+      },
+      "accuracy": 0.8163333333333334,
+      "macro avg": {
+        "precision": 0.7458084472279101,
+        "recall": 0.6541142651003351,
+        "f1-score": 0.6778349887573571,
+        "support": 6000.0
+      },
+      "weighted avg": {
+        "precision": 0.7979924960799106,
+        "recall": 0.8163333333333334,
+        "f1-score": 0.7956325131476002,
+        "support": 6000.0
+      }
+    }
+  },
+  "train_validation_metrics": {
+    "logistic_regression": {
+      "train": {
+        "roc_auc": 0.7286997460932357,
+        "pr_auc": 0.504674262864409,
+        "f1": 0.4835644400647568,
+        "precision": 0.3860418071476736,
+        "recall": 0.6470145036730081,
+        "top_decile_capture_rate": 0.31003955547184026
+      },
+      "validation": {
+        "roc_auc": 0.7081117116704518,
+        "pr_auc": 0.49044321239240035,
+        "f1": 0.461322869955157,
+        "precision": 0.36724676483712626,
+        "recall": 0.6201959306706858,
+        "top_decile_capture_rate": 0.29691032403918616
+      }
+    },
+    "random_forest": {
+      "train": {
+        "roc_auc": 0.849470317695305,
+        "pr_auc": 0.6663733806241365,
+        "f1": 0.6064786518816031,
+        "precision": 0.5652669270833334,
+        "recall": 0.6541721604822001,
+        "top_decile_capture_rate": 0.3586362780184592
+      },
+      "validation": {
+        "roc_auc": 0.7757551074645009,
+        "pr_auc": 0.5514349859163737,
+        "f1": 0.5432357043235704,
+        "precision": 0.5055158987670344,
+        "recall": 0.5870384325546345,
+        "top_decile_capture_rate": 0.3097211755840241
+      }
+    },
+    "xgboost": {
+      "train": {
+        "roc_auc": 0.8449416202287523,
+        "pr_auc": 0.6545424519144308,
+        "f1": 0.5204316721231963,
+        "precision": 0.730428863172226,
+        "recall": 0.4042192503296289,
+        "top_decile_capture_rate": 0.34733471463552457
+      },
+      "validation": {
+        "roc_auc": 0.7760930329615643,
+        "pr_auc": 0.5557278248385682,
+        "f1": 0.4666021297192643,
+        "precision": 0.652232746955345,
+        "recall": 0.3632253202712886,
+        "top_decile_capture_rate": 0.3089675960813866
+      }
+    }
+  },
+  "output_root": "results\\card",
+  "plots_dir": "results\\card\\plots",
+  "predictions_dir": "results\\card\\predictions",
+  "generated_files": [
+    "results/card/metrics.json",
+    "results/card/plots/dataset/numeric_feature_distributions.png",
+    "results/card/plots/dataset/target_distribution.png",
+    "results/card/plots/logistic_regression/calibration_curve.png",
+    "results/card/plots/logistic_regression/confusion_matrix.png",
+    "results/card/plots/logistic_regression/feature_importance.png",
+    "results/card/plots/logistic_regression/precision_recall_curve.png",
+    "results/card/plots/logistic_regression/prediction_score_distribution.png",
+    "results/card/plots/logistic_regression/roc_curve.png",
+    "results/card/plots/logistic_regression/train_vs_validation_metrics.png",
+    "results/card/plots/model_validation_comparison.png",
+    "results/card/plots/random_forest/calibration_curve.png",
+    "results/card/plots/random_forest/confusion_matrix.png",
+    "results/card/plots/random_forest/feature_importance.png",
+    "results/card/plots/random_forest/precision_recall_curve.png",
+    "results/card/plots/random_forest/prediction_score_distribution.png",
+    "results/card/plots/random_forest/roc_curve.png",
+    "results/card/plots/random_forest/train_vs_validation_metrics.png",
+    "results/card/plots/xgboost/calibration_curve.png",
+    "results/card/plots/xgboost/confusion_matrix.png",
+    "results/card/plots/xgboost/feature_importance.png",
+    "results/card/plots/xgboost/precision_recall_curve.png",
+    "results/card/plots/xgboost/prediction_score_distribution.png",
+    "results/card/plots/xgboost/roc_curve.png",
+    "results/card/plots/xgboost/train_vs_validation_metrics.png",
+    "results/card/predictions/logistic_regression_validation_predictions.csv",
+    "results/card/predictions/random_forest_validation_predictions.csv",
+    "results/card/predictions/xgboost_validation_predictions.csv"
+  ],
+  "tuned_hyperparameters_in_script": {
+    "logistic_regression": {
+      "C": 0.8,
+      "max_iter": 3000,
+      "class_weight": "balanced"
+    },
+    "random_forest": {
+      "n_estimators": 300,
+      "max_depth": 10,
+      "min_samples_leaf": 10,
+      "min_samples_split": 20,
+      "class_weight": "balanced_subsample"
+    },
+    "xgboost": {
+      "n_estimators": 400,
+      "max_depth": 4,
+      "learning_rate": 0.05,
+      "subsample": 0.9,
+      "colsample_bytree": 0.9,
+      "min_child_weight": 5,
+      "reg_lambda": 1.5
+    }
+  }
+}
