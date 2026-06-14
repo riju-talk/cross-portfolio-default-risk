@@ -122,14 +122,16 @@ def save_metric_comparison_plot(
     metric_specs = [
         ("pr_auc", "PR-AUC"),
         ("roc_auc", "ROC-AUC"),
+        ("ks_statistic", "KS Statistic"),
         ("f1", "F1"),
         ("top_decile_capture_rate", "Top-Decile Capture"),
+        ("brier_score", "Brier Score"),
     ]
     model_names = list(model_metrics.keys())
     x = np.arange(len(model_names))
     width = 0.18
 
-    fig, ax = plt.subplots(figsize=(11, 6))
+    fig, ax = plt.subplots(figsize=(13, 6))
     for idx, (metric_key, label) in enumerate(metric_specs):
         values = [float(model_metrics[m].get(metric_key, 0.0)) for m in model_names]
         offset = (idx - (len(metric_specs) - 1) / 2) * width
@@ -151,8 +153,8 @@ def save_train_vs_validation_plot(
     output_path: Path,
     title: str,
 ) -> None:
-    metric_keys = ["pr_auc", "roc_auc", "f1", "precision", "recall"]
-    labels = ["PR-AUC", "ROC-AUC", "F1", "Precision", "Recall"]
+    metric_keys = ["pr_auc", "roc_auc", "f1", "precision", "recall", "brier_score", "ks_statistic", "calibration_error"]
+    labels = ["PR-AUC", "ROC-AUC", "F1", "Precision", "Recall", "Brier", "KS", "Calib Err"]
     train_values = [float(train_metrics.get(k, 0.0)) for k in metric_keys]
     validation_values = [float(validation_metrics.get(k, 0.0)) for k in metric_keys]
 
@@ -363,5 +365,8 @@ def build_validation_metrics_map(results: Sequence[Mapping[str, float]]) -> dict
             "precision": float(row.get("precision", 0.0)),
             "recall": float(row.get("recall", 0.0)),
             "top_decile_capture_rate": float(row.get("top_decile_capture_rate", 0.0)),
+            "brier_score": float(row.get("brier_score", 0.0)),
+            "ks_statistic": float(row.get("ks_statistic", 0.0)),
+            "calibration_error": float(row.get("calibration_error", 0.0)),
         }
     return payload
