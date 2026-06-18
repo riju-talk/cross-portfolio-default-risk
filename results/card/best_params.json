@@ -1,0 +1,47 @@
+{
+  "logistic_regression": {
+    "C": 0.12616722433639893,
+    "class_weight": null,
+    "penalty": "l2",
+    "solver": "lbfgs"
+  },
+  "lda": "default",
+  "naive_bayes": "default",
+  "knn": {
+    "metric": "manhattan",
+    "n_neighbors": 26,
+    "weights": "distance"
+  },
+  "decision_tree": {
+    "criterion": "gini",
+    "max_depth": 14,
+    "min_samples_leaf": 98,
+    "min_samples_split": 68
+  },
+  "random_forest": {
+    "class_weight": "balanced_subsample",
+    "max_depth": 8,
+    "max_features": "log2",
+    "min_samples_leaf": 10,
+    "n_estimators": 153
+  },
+  "xgboost": {
+    "colsample_bytree": 0.9022204554172195,
+    "gamma": 0.11439908274581123,
+    "learning_rate": 0.0253959819657586,
+    "max_depth": 5,
+    "min_child_weight": 3,
+    "n_estimators": 185,
+    "subsample": 0.9521871356061031
+  },
+  "mlp": {
+    "activation": "relu",
+    "alpha": 0.004419450186421158,
+    "hidden_layer_sizes": [
+      64,
+      32
+    ],
+    "learning_rate_init": 0.006247746602583892,
+    "solver": "adam"
+  }
+}

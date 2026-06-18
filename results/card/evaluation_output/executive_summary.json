@@ -1,0 +1,62 @@
+{
+  "project": "Credit Card Default Prediction \u2014 Model Evaluation",
+  "date": "2026-06-19 00:09:23",
+  "dataset": "UCI Credit Card Default (Yeh & Lien, 2009)",
+  "n_models_evaluated": 8,
+  "n_test_samples": 5993,
+  "default_rate": 0.22125813449023862,
+  "best_models": {
+    "by_roc_auc": {
+      "model": "Xgboost",
+      "score": 0.7769398986045275,
+      "criterion": "ROC-AUC (ranking quality)"
+    },
+    "by_pr_auc": {
+      "model": "Xgboost",
+      "score": 0.542088767805284,
+      "criterion": "PR-AUC (detection quality for imbalanced data)"
+    },
+    "by_calibration": {
+      "model": "Xgboost",
+      "score": 0.13674983192817675,
+      "criterion": "Brier Score (probability calibration)"
+    },
+    "by_business_value": {
+      "model": "Random Forest",
+      "savings_usd": 18741000.0,
+      "roi_percent": 18641.0,
+      "criterion": "Expected business savings"
+    }
+  },
+  "ensemble_results": {
+    "simple_average_auc": 0.7740985534000319,
+    "weighted_average_auc": 0.77421489932361,
+    "stacking_auc": 0.7760332891542008,
+    "recommendation": "Stacking ensemble provides best balance of performance and calibration"
+  },
+  "key_findings": [
+    "All 8 models were calibrated with isotonic regression, improving probability reliability.",
+    "Best single model by PR-AUC: Xgboost (0.5421).",
+    "Best ensemble: Stacking (0.7760 ROC-AUC).",
+    "Maximum estimated annual savings: $18,741,000 (Random Forest).",
+    "SHAP analysis confirms payment history (PAY_0) and credit utilization (BILL_AMT / LIMIT_BAL) as top predictors."
+  ],
+  "artifacts_generated": [
+    "benchmark_comparison.csv",
+    "model_rankings.csv",
+    "cost_optimal_thresholds.csv",
+    "confusion_matrix_summary.csv",
+    "ensemble_comparison.csv",
+    "business_impact.csv",
+    "vis1_benchmark_comparison.png",
+    "vis2_critical_difference.png",
+    "vis3_cost_curves.png",
+    "vis4_shap_beeswarm.png",
+    "vis5_shap_agreement.png",
+    "vis6_confusion_matrices.png",
+    "vis7_disagreement_matrix.png",
+    "vis8_reliability_diagrams.png",
+    "vis9_ensemble_curves.png",
+    "vis10_gain_lift.png"
+  ]
+}

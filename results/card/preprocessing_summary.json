@@ -1,0 +1,54 @@
+{
+  "dataset": "UCI Default of Credit Card Clients",
+  "n_train": 23972,
+  "n_test": 5993,
+  "n_features_original": 23,
+  "n_features_engineered": 27,
+  "n_features_total": 50,
+  "default_rate_train": 0.22125813449023862,
+  "default_rate_test": 0.22125813449023862,
+  "sorting_smoothing": {
+    "method": "Yeh & Lien (2009)",
+    "bin_size": 500,
+    "n_bins": 60,
+    "real_pd_range": [
+      0.074,
+      0.7355
+    ]
+  },
+  "engineered_features": [
+    "UTIL_1",
+    "UTIL_2",
+    "UTIL_3",
+    "UTIL_4",
+    "UTIL_5",
+    "UTIL_6",
+    "PAY_RATIO_1",
+    "PAY_RATIO_2",
+    "PAY_RATIO_3",
+    "PAY_RATIO_4",
+    "PAY_RATIO_5",
+    "PAY_RATIO_6",
+    "AVG_BILL_AMT",
+    "AVG_PAY_AMT",
+    "BILL_TREND",
+    "PAY_TREND",
+    "NUM_DELAYED",
+    "MAX_DELAY",
+    "RECENCY_DELAY",
+    "AVG_UTIL",
+    "AVG_PAY_RATIO",
+    "LIMIT_BAL_LOG",
+    "AGE_GROUP",
+    "UTIL_DECILE",
+    "LIMIT_BIN",
+    "UTIL_BIN",
+    "pilot_proba"
+  ],
+  "scaling": {
+    "method": "StandardScaler",
+    "fit_on": "training data only",
+    "scaled_columns": 38,
+    "excluded_columns": 10
+  }
+}

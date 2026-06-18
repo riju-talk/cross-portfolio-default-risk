@@ -1,0 +1,22 @@
+{
+  "n_models": 8,
+  "n_tuned": 6,
+  "n_calibrated": 8,
+  "best_model_by_roc_auc": "xgboost",
+  "best_model_by_pr_auc": "xgboost",
+  "best_model_by_brier": "xgboost",
+  "metrics": {
+    "roc_auc_range": [
+      0.7099,
+      0.7769
+    ],
+    "pr_auc_range": [
+      0.4547,
+      0.5421
+    ],
+    "brier_range": [
+      0.1367,
+      0.1475
+    ]
+  }
+}

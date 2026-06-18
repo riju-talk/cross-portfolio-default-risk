@@ -1,293 +1,215 @@
-# Loan Defaulter Prediction Study - Complete Notebook Documentation
+# Loan Defaulter Prediction Study — Complete Notebook Documentation
 
 ## Project Structure
 
-This project implements a comprehensive machine learning pipeline for loan default prediction using two datasets:
-1. **LendingClub Loan Data** (2007-2018) - Large-scale peer-to-peer lending data
-2. **UCI Credit Card Default** - 30,000 credit card clients from Taiwan
+A **data-science-first** investigation into credit default across two domains:
+1. **LendingClub Installment Loans** (2007-2018, 2M+ records, 150+ features)
+2. **UCI Credit Card Default** (30,000 Taiwanese clients, 23 behavioral features)
 
 ---
 
 ## Notebook Organization
 
-The project contains **8 complete notebooks** organized into 4-step workflows for each dataset:
+8 notebooks organized as 4-step research workflows per dataset.
+
+---
 
 ### Loan Default Prediction Workflow
 
-#### 01_loan_default_EDA.ipynb
+#### `01_loan_default_EDA.ipynb` (20 cells)
 **Purpose**: Exploratory Data Analysis for LendingClub accepted loans
-**Key Content**:
-- Dataset overview and structure
-- Target variable definition (default vs non-default)
-- Class imbalance analysis with visualizations
-- Leakage column identification and removal
-- Feature type analysis and distributions
-- Correlation heatmaps
-- Missing value analysis
+- Terminal-status target mapping (Charged Off / Default → 1, Fully Paid → 0)
+- Class imbalance quantification (~20% default rate)
+- Leakage audit: 5 groups identified (repayment aggregates, dates, delinquency, hardship, settlement) — 145+ columns
+- Univariate distribution analysis (loan_amnt, int_rate, annual_inc, dti, revol_util, fico_avg × target overlay)
+- Bivariate analysis with t-tests (int_rate, dti, annual_inc by default status)
+- Correlation heatmap (full Spearman matrix, top target correlations)
+- Missingness analysis (concentrated in mort_acc, pub_rec_bankruptcies)
+- Payment capacity analysis (loan_to_income, payment_to_income, fico_avg)
+- EDA artifact export to `results/loan/eda_summary.json`
 
-#### 02_loan_preprocessing_feature_engineering.ipynb
-**Purpose**: Transform raw loan data into modeling-ready format
-**Key Content**:
-- Chunked data loader for large files (memory-efficient)
-- Leakage-aware column removal
-- Feature categorization (loan, borrower, credit history)
-- Missing value imputation strategies
-- Categorical encoding (one-hot, ordinal)
-- Train-test splitting
-- Feature scaling for sensitive algorithms
+#### `02_loan_preprocessing_feature_engineering.ipynb` (20 cells)
+**Purpose**: Transform raw loan data into leakage-safe, modeling-ready format
+- Chunked loader for memory-efficient large-file processing
+- 5 leakage groups removed (114+ columns from `columns_to_drop.txt`)
+- Feature categorization: loan, borrower, credit history, loan attributes
+- Domain-driven feature engineering (12 features):
+  - `loan_to_income`, `payment_to_income`, `fico_avg`, `fico_score_bucket`
+  - `acc_open_ratio`, `inquiry_per_acc`, `has_delinq`, `has_pub_rec`, `has_bankruptcy`
+  - `dti_bin`, `int_rate_bin`, `emp_length_numeric`
+- Tiered missing value strategy: drop >50%, median-impute numeric, mode-impute categorical
+- Ordinal encoding (grade A→1…G→7, sub_grade A1→1…G5→35)
+- One-hot encoding (home_ownership, purpose, verification_status, initial_list_status, application_type)
+- Outlier capping at 99th percentile (annual_inc, loan_amnt, revol_bal, installment)
+- Mutual information analysis (top-20 features plotted)
+- Stratified 80/20 split, StandardScaler, artifact export
 
-#### 03_loan_modeling.ipynb
-**Purpose**: Train and compare multiple classification models
-**Key Content**:
-- **5 Classifiers**: Logistic Regression, Random Forest, XGBoost, LightGBM, SVM
-- Class-weight balancing for imbalance
-- Stratified train-test splits
-- ROC-AUC and PR-AUC evaluation
-- Feature importance analysis
-- Model comparison table
-- Best model persistence
+#### `03_loan_modeling.ipynb` (22 cells)
+**Purpose**: Train, tune, calibrate, and compare 4 classifiers
+- **4 models**: Logistic Regression, Random Forest, XGBoost, LightGBM
+- Hyperparameter tuning: `RandomizedSearchCV` with 3-fold stratified CV (PR-AUC scoring)
+- Tuned parameters: LR (C, solver), RF (n_estimators, max_depth, min_samples_leaf/split, max_features), XGB (n_estimators, max_depth, lr, subsample, colsample, min_child_weight, reg_lambda), LGBM (n_estimators, max_depth, lr, num_leaves, min_child_samples)
+- Probability calibration: isotonic regression on 80/20 holdout split
+- Raw vs calibrated comparison: ROC-AUC, PR-AUC, Brier score
+- Model comparison table sorted by calibrated PR-AUC
+- ROC curves overlay with AUC legend
+- PR curves overlay with prevalence baseline
+- Calibration impact bar chart (Brier Δ)
+- Feature importance comparison (1×3 subplots for tree models)
+- Artifact export: model_comparison.csv, all_predictions.npz, best_params.json, models/*.pkl, training_summary.json
 
-#### 04_loan_evaluation_analysis.ipynb
-**Purpose**: Comprehensive model evaluation and interpretation
-**Key Content**:
-- ROC and Precision-Recall curves
-- Confusion matrices
-- Threshold sensitivity analysis
-- Feature importance visualization
-- Prediction distribution analysis
-- Calibration curves
-- Business recommendations
-- Limitations and future work
+#### `04_loan_evaluation_analysis.ipynb` (24 cells)
+**Purpose**: Comprehensive evaluation with SHAP, cost analysis, and business metrics
+- ROC curve overlay (all models, AUC values)
+- PR curve overlay (all models, PR-AUC values)
+- Confusion matrix heatmaps (sensitivity, specificity per model)
+- Cost-sensitive threshold optimization (FN:FP = 100:1, find optimal threshold per model)
+- Calibration deep-dive: reliability diagrams per model with Brier annotation
+- SHAP explainability (TreeSHAP): beeswarm plot (top 15 features), waterfall plots (correct default prediction + false negative analysis)
+- Feature importance rank agreement heatmap across tree models
+- Prediction distribution analysis (default vs non-default overlay, KS statistic)
+- Business metrics: expected loss without/with model, cost savings, ROI
+- Summary artifact export to `results/loan_evaluation_summary.json`
 
 ---
 
 ### Credit Card Default Prediction Workflow
 
-#### 01_card_default_EDA.ipynb
-**Purpose**: Exploratory Data Analysis for UCI credit card dataset
-**Key Content**:
-- Dataset characteristics (30K rows, 23 features, no missing values)
-- Feature descriptions and interpretations
-- Target distribution (default rate ~22%)
-- Demographic, repayment, bill, and payment feature analysis
-- Clean data validation
+#### `01_card_default_EDA.ipynb` (24 cells)
+**Purpose**: Exploratory Data Analysis for UCI credit card clients
+- Structural validation: (30,000 × 24), zero missing, zero duplicates, all-numeric
+- Feature taxonomy: demographic, repayment, bill, payment groups
+- Target distribution: ~22% default rate (why accuracy is misleading)
+- Leakage audit: all features verified pre-target (April–Sept 2005, target = Oct 2005)
+- Univariate histograms by feature group
+- Bivariate analysis with t-tests (LIMIT_BAL by default status)
+- Full correlation matrix + intra-group analysis (bill amounts: high multicollinearity)
+- Variance Inflation Factor (VIF) quantification
+- Payment behavior deep dive (payment-to-bill ratio, zero-payment rates)
+- EDA artifact export to `results/card/eda_summary.json`
 
-#### 02_card_preprocessing_feature_engineering.ipynb
-**Purpose**: Preprocess and engineer features for credit card data
-**Key Content**:
-- Feature renaming (X1→LIMIT_BAL, etc.)
-- Feature grouping (demographics, repayment status, bills, payments)
-- Data quality checks
-- **Feature engineering**: avg bill/payment amounts, utilization rate, payment ratios, delayed payment counts
-- Stratified train-test split (80/20)
-- Feature scaling with StandardScaler
-- Save processed datasets
+#### `02_card_preprocessing_feature_engineering.ipynb` (28 cells)
+**Purpose**: Transform raw data with 12 engineered features + Sorting Smoothing PD estimation
+- 12 engineered features:
+  - Utilization ratios (UTIL_1…6 = BILL_AMT / LIMIT_BAL)
+  - Payment ratios (PAY_RATIO_1…6 = PAY_AMT / BILL_AMT, capped at 3)
+  - Averages (AVG_BILL_AMT, AVG_PAY_AMT)
+  - Trend slopes (BILL_TREND, PAY_TREND via row-wise linear regression)
+  - Delinquency features (NUM_DELAYED, MAX_DELAY, RECENCY_DELAY)
+  - Summaries (AVG_UTIL, AVG_PAY_RATIO) + LIMIT_BAL_LOG
+- **8 publication-quality visualizations**:
+  1. Credit utilization risk curve (default rate by decile, 95% CI)
+  2. Delinquency heatmap (non-default vs default temporal patterns)
+  3. Payment discipline trajectory (monthly payment ratios with Q25–Q75 bands)
+  4. Risk segmentation matrix (LIMIT_BAL × AVG_UTIL heatmap)
+  5. Mutual information (model-agnostic signal ranking)
+  6. Sorting Smoothing Method (Yeh & Lien 2009 replication — real PD estimation)
+  7. Real PD distribution & calibration gap
+  8. Feature engineering impact (cumulative MI comparison)
+- Stratified 80/20 split, StandardScaler, artifact export
 
-#### 03_card_modeling.ipynb
-**Purpose**: Train 5 classifiers on credit card data
-**Key Content**:
-- **5 Classifiers**: Logistic Regression, Random Forest, XGBoost, LightGBM, Neural Network (MLP)
-- Class balancing via weights
-- Model comparison on ROC-AUC and PR-AUC
-- Feature importance for tree-based models
-- Best model selection and persistence
+#### `03_card_modeling.ipynb` (26 cells)
+**Purpose**: 8-model zoo with hyperparameter tuning and isotonic calibration
+- **8 models**: Logistic Regression, LDA, Gaussian Naive Bayes, k-NN, Decision Tree, Random Forest, XGBoost, MLP Neural Network
+- `RandomizedSearchCV` (3-fold, PR-AUC scoring) for tunable models
+- Isotonic calibration on held-out validation split
+- Raw vs calibrated metrics: ROC-AUC, PR-AUC, F1, Precision, Recall
+- Model comparison table (sorted by calibrated ROC-AUC)
+- 6 visualizations:
+  1. Model performance radar (raw vs calibrated ROC/PR-AUC)
+  2. Calibration impact (Brier score comparison)
+  3. ROC curves overlay (all 8 models)
+  4. Precision-Recall curves overlay
+  5. Predicted probability distributions (2×4 subplots)
+  6. Feature importance comparison (3 tree models side-by-side)
+- Artifact export: model_comparison.csv, all_predictions.npz, best_params.json, training_summary.json
 
-#### 04_card_evaluation_analysis.ipynb
-**Purpose**: Detailed evaluation and cross-dataset insights
-**Key Content**:
-- ROC and PR curves
-- Confusion matrix and classification reports
-- Threshold analysis with precision-recall-F1 trade-offs
-- Feature importance (repayment status features dominate)
-- Prediction distribution histograms
-- Calibration analysis
-- **Cross-dataset validation discussion** (loan vs card, US vs Taiwan)
-- Production deployment recommendations
-- Research extension ideas
+#### `04_card_evaluation_analysis.ipynb` (31 cells)
+**Purpose**: Deep evaluation with paper replication, SHAP, ensembles, and business impact
+- Paper benchmark replication (Yeh & Lien 2009 — ANN, LR, RF, XGB literature baselines)
+- Statistical model comparison: Friedman test, Nemenyi post-hoc, critical difference diagram
+- Cost-sensitive threshold optimization (4 scenarios: FN:FP from 10:1 to 500:1)
+- Cost curves visualization (total cost vs threshold per scenario)
+- SHAP explainability: beeswarm plots (tree models), feature importance rank agreement heatmap
+- Error analysis: confusion matrices (all 8 models), model disagreement matrix
+- Calibration deep-dive: reliability diagrams (2×4 grid, raw vs calibrated Brier)
+- Ensemble strategy: simple average, weighted average, stacking (logistic regression meta-learner)
+- Business metrics: expected value, cost savings, ROI at optimal threshold
+- Final artifact export for presentation
 
 ---
 
 ## Key Design Principles
 
-### 1. Leakage Prevention
-All notebooks strictly enforce that only **pre-origination** features are used:
-- Remove repayment aggregates (total_pymnt, recoveries, etc.)
-- Remove post-issuance dates (last_pymnt_d, settlement_date, etc.)
-- Remove delinquency indicators observed after issuance
-- Remove hardship and settlement information
-
-### 2. Class Imbalance Handling
-- Use `class_weight='balanced'` in sklearn models
-- Use `scale_pos_weight` in XGBoost/LightGBM
-- Evaluate with **ROC-AUC** and **PR-AUC**, not accuracy
-- Visualize threshold trade-offs for business decision-making
-
-### 3. Reproducibility
-- Random seeds set to 42 throughout
-- Preprocessing functions saved in notebooks for reuse
-- Train-test splits preserved to disk
-- Best models saved as `.pkl` files
-- Results tables saved as CSV
-
-### 4. Interpretability
-- Feature importance plots for tree models
-- Coefficient inspection for logistic regression
-- SHAP analysis mentioned for future work
-- Clear markdown narrative explaining each step
-
-### 5. Scalability
-- Chunked loading for large LendingClub files
-- Memory-efficient processing (drop unused columns early)
-- Parallel processing enabled (`n_jobs=-1`)
-- Sample-based demonstrations with clear notes on full-scale processing
+1. **Leakage Prevention**: All notebooks remove post-outcome features (repayment aggregates, dates, delinquency, hardship, settlement fields in loan data; target-month information in card data)
+2. **Imbalance Handling**: `class_weight='balanced'`, `scale_pos_weight`, isotonic calibration, PR-AUC over accuracy
+3. **Reproducibility**: seed=42, stratified splits, artifact persistence, deterministic pipelines
+4. **Interpretability**: SHAP, feature importance across models, calibration analysis, cost-sensitive thresholds
+5. **Scalability**: chunked loading for large files, memory-efficient processing, `n_jobs=-1`
 
 ---
 
-## Data Processing Summary
+## Data Summary
 
-### LendingClub Loan Data
-- **Raw**: ~2M+ rows, 150+ columns
-- **After leakage removal**: ~114 columns
-- **Terminal statuses only**: Charged Off, Default, Fully Paid
-- **Target**: Binary (1=default, 0=non-default)
-- **Default rate**: ~15-20% (imbalanced)
-
-### UCI Credit Card Data
-- **Raw**: 30,000 rows, 24 columns
-- **No missing values**
-- **Target**: Binary (1=default, 0=non-default)
-- **Default rate**: ~22%
-- **Engineered features**: +5 (avg bill/payment, ratios, delayed counts)
+| | LendingClub Loans | UCI Credit Card |
+|---|---|---|
+| **Rows** | ~2M+ (sample: 180K) | 30,000 |
+| **Features** | 150+ raw → ~30 after leakage removal + engineering | 23 → 35 after 12 engineered |
+| **Default rate** | ~20% | ~22% |
+| **Key predictors** | int_rate, fico_avg, dti, loan_to_income | PAY_0, AVG_UTIL, MAX_DELAY |
+| **Challenge** | Leakage, missingness, scale | Multicollinearity, limited features |
 
 ---
 
-## Model Performance Expectations
+## Dependencies
 
-Based on literature and dataset characteristics:
-
-### Loan Default (Expected)
-- **ROC-AUC**: 0.65-0.75 (good discrimination)
-- **PR-AUC**: 0.30-0.50 (minority class performance)
-- **Best models**: XGBoost, LightGBM (handle non-linearity)
-
-### Credit Card Default (Expected)
-- **ROC-AUC**: 0.75-0.80 (cleaner data, fewer features)
-- **PR-AUC**: 0.40-0.60
-- **Best models**: XGBoost, Random Forest
-
----
-
-## Running the Notebooks
-
-### Prerequisites
 ```bash
-# Install dependencies (already in pyproject.toml)
-pip install pandas numpy scikit-learn xgboost lightgbm plotly seaborn jupyter
+pip install pandas numpy scikit-learn xgboost lightgbm plotly seaborn shap statsmodels jupyter joblib
 ```
 
-### Execution Order
+Or via uv:
+```bash
+uv sync
+```
 
-**For Loan Default:**
-1. Run `01_loan_default_EDA.ipynb` (lightweight, uses existing processed data)
-2. Run `02_loan_preprocessing_feature_engineering.ipynb` (creates processed sample)
-3. Run `03_loan_modeling.ipynb` (trains 5 models, ~2-5 minutes)
-4. Run `04_loan_evaluation_analysis.ipynb` (generates visualizations)
+---
 
-**For Credit Card Default:**
-1. Run `01_card_default_EDA.ipynb` (fast, small dataset)
-2. Run `02_card_preprocessing_feature_engineering.ipynb` (creates train/test splits)
-3. Run `03_card_modeling.ipynb` (trains 5 models, ~1-2 minutes)
-4. Run `04_card_evaluation_analysis.ipynb` (comprehensive evaluation)
+## Quick Start
 
-**Notes:**
-- LendingClub notebooks use a 10K-row sample by default for speed
-- To process the full dataset, uncomment chunked loader calls in preprocessing notebook
-- Credit card notebooks process all 30K rows (fast enough)
+```bash
+# Run both pipeline scripts
+python main.py --problem both --max-loan-rows 30000
+
+# Or run notebooks in order per track (see above)
+```
 
 ---
 
 ## Output Artifacts
 
-### Saved Files
 ```
-data/processed/
-├── credit_card_processed.csv       # Full processed UCI data
-├── credit_card_train.csv           # Training split
-├── credit_card_test.csv            # Test split
-└── loan_sample_processed.csv       # LendingClub sample
-
 results/
-├── loan_model_comparison.csv       # Model metrics comparison
-├── card_model_comparison.csv       # Model metrics comparison
-├── best_loan_model_xgb.pkl         # Saved best loan model
-└── best_card_model_xgb.pkl         # Saved best card model
+├── card/
+│   ├── metrics.json
+│   ├── plots/ (dataset/ + 7 plots per model)
+│   └── predictions/ (CSV per model)
+├── loan/
+│   ├── metrics.json
+│   ├── plots/ (dataset/ + 7 plots per model)
+│   └── predictions/ (CSV per model)
+├── card_model_comparison.csv
+├── loan_model_comparison.csv
+└── best_*_model_*.pkl
 ```
 
 ---
 
-## Research Context
+## Research References
 
-This project is **inspired by ACM research on credit risk modeling** and follows best practices:
-
-1. **Leakage-aware preprocessing** (Kaufman et al., 2012)
-2. **Cost-sensitive learning** for imbalanced data
-3. **Ranking-based evaluation** (ROC-AUC, PR-AUC over accuracy)
-4. **Feature interpretability** for regulatory compliance
-5. **Cross-dataset validation** to assess generalization
-
-### Differences from Production Systems
-- Simplified feature engineering (no external bureau data)
-- Hyperparameter tuning is bounded (research-oriented, not exhaustive)
-- No temporal cross-validation
-- No fairness audits
-- No online learning / model updating
+- Yeh, I. C., & Lien, C. H. (2009). The comparisons of data mining techniques for predictive accuracy of probability of default. *Expert Systems with Applications*.
+- Kaufman, S., Rosset, S., & Perlich, C. (2012). Leakage in data mining. *ACM TKDD*.
+- Provost, F., & Fawcett, T. (2001). Robust classification for imprecise environments. *Machine Learning*.
 
 ---
 
-## Limitations and Extensions
-
-### Current Limitations
-1. Sample-based processing for LendingClub (demo purposes)
-2. Simplified imputation (median/mode only)
-3. No SHAP/LIME individual explanations
-4. No cost-matrix optimization
-5. No time-based cross-validation
-
-### Future Extensions
-1. **Advanced feature engineering**: Payment velocity, trend features, polynomial interactions
-2. **Large-scale hyperparameter tuning**: Bayesian optimization with wider search spaces and richer CV design
-3. **Model stacking/ensembling**: Combine predictions from multiple models
-4. **SHAP analysis**: Explain individual predictions for interpretability
-5. **Fairness analysis**: Check for demographic bias
-6. **Transfer learning**: Apply loan model to card data and measure performance drop
-7. **Temporal validation**: Time-series cross-validation with walk-forward splits
-8. **Production pipeline**: MLOps setup with monitoring, A/B testing, retraining
-
----
-
-## Citation and Acknowledgments
-
-### Datasets
-- **LendingClub**: Available via Kaggle (historical peer-to-peer lending data)
-- **UCI Credit Card**: Yeh, I-Cheng. (2016). Default of Credit Card Clients. UCI Machine Learning Repository.
-
-### References
-- Kaufman, S., Rosset, S., & Perlich, C. (2012). Leakage in data mining. ACM TKDD.
-- Provost, F., & Fawcett, T. (2001). Robust classification for imprecise environments. Machine Learning.
-
----
-
-## Contact and Support
-
-For questions or contributions:
-- Review individual notebook markdown cells for detailed explanations
-- Check inline code comments for implementation details
-- Refer to scikit-learn and XGBoost documentation for model parameters
-- Consult ACM KDD proceedings for credit risk modeling research
-
----
-
-**Project Status**: ✅ Complete
-**Last Updated**: January 2026
-**Python Version**: 3.12+
-**Key Dependencies**: scikit-learn 1.8+, xgboost 3.1+, pandas 3.0+, plotly 6.5+
+**Python**: 3.12+ | **Key deps**: scikit-learn 1.8+, xgboost 3.1+, pandas 3.0+, plotly 6.5+

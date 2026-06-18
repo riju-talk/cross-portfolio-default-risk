@@ -31,10 +31,10 @@ Both share a common **~20% default rate** but differ fundamentally in feature st
 
 ```
 ├── notebooks/
-│   ├── 01_card_EDA.ipynb               # Card: comprehensive EDA with VIF, correlations
-│   ├── 02_card_preprocessing.ipynb      # Card: 12 engineered features + sorting smoothing
-│   ├── 03_card_modeling.ipynb           # Card: 8-model zoo + isotonic calibration
-│   ├── 04_card_evaluation.ipynb         # Card: SHAP, cost curves, statistical tests
+│   ├── 01_card_default_EDA.ipynb               # Card: comprehensive EDA with VIF, correlations
+│   ├── 02_card_preprocessing_feature_engineering.ipynb  # Card: 12 engineered features + sorting smoothing
+│   ├── 03_card_modeling.ipynb                  # Card: 8-model zoo + isotonic calibration
+│   ├── 04_card_evaluation_analysis.ipynb       # Card: SHAP, cost curves, statistical tests
 │   ├── 01_loan_default_EDA.ipynb        # Loan: chunked EDA, missingness, target mapping
 │   ├── 02_loan_preprocessing_feature_engineering.ipynb  # Loan: leakage-safe pipeline
 │   ├── 03_loan_modeling.ipynb           # Loan: 5 models + hyperparameter tuning
@@ -161,10 +161,10 @@ python main.py --problem loan --max-loan-rows 120000 --loan-chunksize 100000
 
 ### Suggested Notebook Order
 
-1. `01_card_EDA.ipynb` / `01_loan_default_EDA.ipynb`
-2. `02_card_preprocessing.ipynb` / `02_loan_preprocessing_feature_engineering.ipynb`
+1. `01_card_default_EDA.ipynb` / `01_loan_default_EDA.ipynb`
+2. `02_card_preprocessing_feature_engineering.ipynb` / `02_loan_preprocessing_feature_engineering.ipynb`
 3. `03_card_modeling.ipynb` / `03_loan_modeling.ipynb`
-4. `04_card_evaluation.ipynb` / `04_loan_evaluation_analysis.ipynb`
+4. `04_card_evaluation_analysis.ipynb` / `04_loan_evaluation_analysis.ipynb`
 
 Then run script pipelines for clean replication:
 ```bash

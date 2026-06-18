@@ -1,0 +1,37 @@
+{
+  "dataset": "UCI Default of Credit Card Clients",
+  "n_rows": 29965,
+  "n_features": 23,
+  "n_target_classes": 2,
+  "default_rate": 0.2213,
+  "imbalance_ratio": 3.52,
+  "missing_values": 0,
+  "duplicate_rows": 0,
+  "top_predictors_by_correlation": {
+    "PAY_0": 0.32496375967679036,
+    "PAY_2": 0.26365623131100085,
+    "PAY_3": 0.2352304791711376,
+    "PAY_4": 0.21655085455746317,
+    "PAY_5": 0.2040591287539334
+  },
+  "multicollinearity_risk": {
+    "bill_amounts": "HIGH (VIF > 10)",
+    "repayment_status": "MODERATE",
+    "demographic": "LOW"
+  },
+  "key_insights": [
+    "Repayment status (PAY_0) is the strongest single predictor (r \u2248 0.32)",
+    "Defaulters have lower credit limits on average",
+    "Bill amounts show extreme multicollinearity \u2014 will engineer trends/ratios",
+    "Zero-payment rate is higher among defaulters, especially in recent months",
+    "No leakage detected; all features are pre-target"
+  ],
+  "preprocessing_recommendations": [
+    "Engineer trend features (slopes) for bill and payment series",
+    "Create utilization ratios (BILL_AMT / LIMIT_BAL) per month",
+    "Create payment ratios (PAY_AMT / BILL_AMT) per month",
+    "Create delayed-payment count and max-delay features",
+    "Standard-scale for LR/LDA/k-NN/MLP; tree models need no scaling",
+    "Stratified split (80/20) with seed=42"
+  ]
+}
