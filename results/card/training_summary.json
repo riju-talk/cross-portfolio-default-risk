@@ -1,22 +1,14 @@
 {
-  "n_models": 8,
-  "n_tuned": 6,
-  "n_calibrated": 8,
-  "best_model_by_roc_auc": "xgboost",
-  "best_model_by_pr_auc": "xgboost",
-  "best_model_by_brier": "xgboost",
-  "metrics": {
-    "roc_auc_range": [
-      0.7099,
-      0.7769
-    ],
-    "pr_auc_range": [
-      0.4547,
-      0.5421
-    ],
-    "brier_range": [
-      0.1367,
-      0.1475
-    ]
-  }
+  "n_models_trained": 4,
+  "n_tuned": 4,
+  "best_model_name": "xgboost",
+  "best_cal_pr_auc": 0.5270237824419338,
+  "best_cal_roc_auc": 0.7763464535984985,
+  "best_brier": 0.13717243075370789,
+  "model_ranking": [
+    "xgboost",
+    "lightgbm",
+    "random_forest",
+    "logistic_regression"
+  ]
 }

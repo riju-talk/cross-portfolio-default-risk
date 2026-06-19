@@ -1,0 +1,19 @@
+{
+  "dataset": "LendingClub Accepted Loans",
+  "sample_rows": 44006,
+  "n_features_total": 54,
+  "n_features_original": 25,
+  "n_engineered": 11,
+  "n_leakage_removed": 85,
+  "default_rate_train": 0.2051471423701852,
+  "default_rate_test": 0.20518064076346285,
+  "preprocessing_steps": [
+    "Leakage removal",
+    "Feature engineering",
+    "Imputation",
+    "Encoding",
+    "Outlier capping",
+    "Stratified split",
+    "Standard scaling"
+  ]
+}

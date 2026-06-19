@@ -1,0 +1,42 @@
+{
+  "dataset": "LendingClub Accepted Loans (2007-2018Q4)",
+  "sample_rows": 158348,
+  "n_features": 32,
+  "default_rate": 0.1999,
+  "imbalance_ratio": 4.0,
+  "top_missing_features": {
+    "emp_length": 0.063,
+    "revol_util": 0.0004,
+    "payment_to_income": 0.0,
+    "dti": 0.0,
+    "payment_to_income_capped": 0.0,
+    "loan_to_income_capped": 0.0,
+    "loan_to_income": 0.0
+  },
+  "grade_default_rates": {
+    "A": 0.054,
+    "B": 0.1288,
+    "C": 0.2321,
+    "D": 0.3342,
+    "E": 0.4328,
+    "F": 0.523,
+    "G": 0.5804
+  },
+  "top_5_predictors_by_abs_corr": {
+    "int_rate": 0.307,
+    "loan_to_income_capped": 0.1467,
+    "loan_to_income": 0.1413,
+    "fico_range_low": 0.136,
+    "fico_avg": 0.136
+  },
+  "key_insights": [
+    "~20% default rate -- imbalanced but not extreme (imbalance ratio ~4:1)",
+    "Interest rate, FICO score, and DTI are the strongest individual predictors of default",
+    "Missingness is concentrated in credit-history features (mort_acc, pub_rec_bankruptcies)",
+    "5 leakage groups identified (repayment, dates, delinquency, hardship, settlement) -- 145+ columns must be removed before modeling",
+    "Loan-to-income ratio separates defaulters from non-defaulters more clearly than raw loan amount or income alone",
+    "Grade A borrowers have <5% default rate; Grade G borrowers exceed 40%",
+    "All tested bivariate differences are statistically significant (p < 0.001)",
+    "Multicollinear groups exist (FICO triplet, loan_amnt/installment) -- dimensionality reduction warranted"
+  ]
+}

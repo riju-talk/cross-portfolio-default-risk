@@ -1,0 +1,22 @@
+{
+  "best_model": "xgboost",
+  "calibrated_pr_auc": 0.527,
+  "calibrated_roc_auc": 0.7763,
+  "brier_score": 0.1372,
+  "optimal_threshold": 0.01,
+  "estimated_cost_savings_pct": 97.09,
+  "top_features": [
+    "PAY_0",
+    "pilot_proba",
+    "AVG_PAY_AMT",
+    "NUM_DELAYED",
+    "AVG_PAY_RATIO",
+    "BILL_AMT1",
+    "UTIL_2",
+    "UTIL_1",
+    "AVG_BILL_AMT",
+    "MAX_DELAY"
+  ],
+  "calibration_quality": "Acceptable calibration",
+  "recommendation": "Strong ranking ability (ROC-AUC=0.776). High business impact: 97% cost reduction vs no-model baseline."
+}
