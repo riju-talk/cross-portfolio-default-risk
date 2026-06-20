@@ -68,9 +68,9 @@ def main() -> None:
             output_path=RESULTS_DIR / "card" / "metrics.json",
         )
         combined_payload["runs"]["card"] = card_payload
-        bm = card_payload["best_model"]
+        bm = card_payload.get("best_calibrated_model", card_payload.get("best_raw_model", {}))
         dr = card_payload.get("class_distribution", {}).get("default_rate", "?")
-        print(f"Card best model: {bm['name']} | PR-AUC={bm['pr_auc']:.4f} ROC-AUC={bm['roc_auc']:.4f} KS={bm.get('ks_statistic', '?'):.4f} Brier={bm.get('brier_score', '?'):.4f} | Default rate={dr:.2%}")
+        print(f"Card best calibrated: {bm['name']} | PR-AUC={bm['pr_auc']:.4f} ROC-AUC={bm['roc_auc']:.4f} KS={bm.get('ks_statistic', '?'):.4f} Brier={bm.get('brier_score', '?'):.4f} | Default rate={dr:.2%}")
 
     if args.problem in {"loan", "both"}:
         print("Running loan-default pipeline...")
@@ -81,9 +81,9 @@ def main() -> None:
             chunksize=args.loan_chunksize,
         )
         combined_payload["runs"]["loan"] = loan_payload
-        bm = loan_payload["best_model"]
+        bm = loan_payload.get("best_calibrated_model", loan_payload.get("best_raw_model", {}))
         dr = loan_payload.get("class_distribution", {}).get("default_rate", "?")
-        print(f"Loan best model: {bm['name']} | PR-AUC={bm['pr_auc']:.4f} ROC-AUC={bm['roc_auc']:.4f} KS={bm.get('ks_statistic', '?'):.4f} Brier={bm.get('brier_score', '?'):.4f} | Default rate={dr:.2%}")
+        print(f"Loan best calibrated: {bm['name']} | PR-AUC={bm['pr_auc']:.4f} ROC-AUC={bm['roc_auc']:.4f} KS={bm.get('ks_statistic', '?'):.4f} Brier={bm.get('brier_score', '?'):.4f} | Default rate={dr:.2%}")
 
     combined_path = RESULTS_DIR / "metrics.json"
     combined_path.write_text(json.dumps(combined_payload, indent=2), encoding="utf-8")
