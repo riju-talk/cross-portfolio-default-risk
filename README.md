@@ -1,4 +1,4 @@
-# Credit Risk Default Prediction: A Dual-Study Data Science Investigation
+# Cross portfolio default risk: A Dual-Study Data Science Investigation
 
 This repository presents a **research-oriented, data-science-first** investigation into credit default prediction across two heterogeneous risk domains:
 
